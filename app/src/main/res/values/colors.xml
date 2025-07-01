@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Brand / Primary Colors -->
+    <color name="colorPrimary">#5B0888</color>         <!-- Deep Purple -->
+    <color name="colorPrimaryDark">#44066E</color>     <!-- Darker tone for status bar -->
+    <color name="colorAccent">#713ABE</color>          <!-- Royal Purple -->
+
+    <!-- Backgrounds -->
+    <color name="backgroundLight">#E5CFF7</color>      <!-- Light lavender background -->
+    <color name="cardBackground">#F9F6FC</color>       <!-- Slight variation for cards -->
+    <color name="inputFieldBackground">#F5F0FA</color> <!-- Soft input backgrounds -->
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#1C1C1E</color>          <!-- Almost black -->
+    <color name="textSecondary">#3A3A3C</color>        <!-- Dark gray -->
+    <color name="textOnPrimary">#FFFFFF</color>        <!-- White text on purple -->
+
+    <!-- Status / Alerts -->
+    <color name="successGreen">#32D74B</color>         <!-- Success status -->
+    <color name="errorRed">#FF3B30</color>             <!-- Error message color -->
+    <color name="infoBlue">#5AC8FA</color>             <!-- Info/tooltip -->
+
+    <!-- Dividers and Borders -->
+    <color name="dividerColor">#D1D1D6</color>
+    <color name="borderLight">#CCCCCC</color>
+    <color name="borderDark">#8E8E93</color>
+
+    <!-- Optional Tints -->
+    <color name="lavenderMedium">#9D76C1</color>
+    <color name="lavenderLight">#E5CFF7</color>
+
+    <!-- Neutrals -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>

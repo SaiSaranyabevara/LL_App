@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/backgroundLight">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back"
+            android:contentDescription="Go Back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/textPrimary"
+            android:layout_marginBottom="16dp" />
+
+
+    <!-- Skill Icon -->
+
+
+    <!-- Skill Title -->
+    <TextView
+        android:id="@+id/skillTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skill Title"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/textPrimary"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Skill Description -->
+    <TextView
+        android:id="@+id/skillDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dynamic skill description here"
+        android:textSize="16sp"
+        android:textColor="@color/textSecondary" />
+</LinearLayout>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundLight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- App Logo -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="60dp"
+            android:layout_marginTop="20dp"
+            app:cardPreventCornerOverlap="true"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="App Logo"
+                android:scaleType="centerCrop"
+                android:src="@drawable/learneasy_logo" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:text="Create Account"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Description -->
+        <TextView
+            android:text="Sign up to access courses, track progress, and start learning today!"
+            android:textSize="14sp"
+            android:textColor="@color/textSecondary"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Name -->
+        <EditText
+            android:id="@+id/nameInput"
+            android:hint="Full Name"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:layout_marginTop="24dp"
+            android:drawableLeft="@drawable/person"
+            android:drawablePadding="10dp"
+            android:background="@drawable/rounded_card_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/emailInput"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/emal"
+            android:drawablePadding="10dp"
+            android:background="@drawable/rounded_card_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/passwordInput"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="10dp"
+            android:background="@drawable/rounded_card_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Confirm Password -->
+        <EditText
+            android:id="@+id/confirmPasswordInput"
+            android:hint="Re-enter Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="10dp"
+            android:background="@drawable/rounded_card_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/registerBtn"
+            android:text="Register"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/textOnPrimary"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <!-- Already have an account? -->
+        <TextView
+            android:id="@+id/loginRedirect"
+            android:text="Already have an account? Login"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>

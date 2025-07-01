@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "121968905854",
+    "project_id": "learneasyapp-5dfcd",
+    "storage_bucket": "learneasyapp-5dfcd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121968905854:android:ae0646652f3b6a49c8522f",
+        "android_client_info": {
+          "package_name": "com.example.learneasy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121968905854-2sj4trkg8gf9tgmcj617r37c8m0jol4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLshx_uVFYbez177QpaGvuj_jawdKELMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121968905854-2sj4trkg8gf9tgmcj617r37c8m0jol4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

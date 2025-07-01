@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.learneasy.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+
+        <!-- Action to LearnFragment (with level argument declared) -->
+        <action
+            android:id="@+id/action_homeFragment_to_learnFragment"
+            app:destination="@id/learnFragment">
+
+            <!-- ✅ Declare argument here for Safe Args -->
+            <argument
+                android:name="level"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <!-- Learn Fragment (receives argument from HomeFragment) -->
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="com.example.learneasy.LearnFragment"
+        android:label="Learn"
+        tools:layout="@layout/fragment_learn">
+
+        <!-- Optional default value -->
+        <argument
+            android:name="level"
+            app:argType="string"
+            android:defaultValue="Basic" />
+    </fragment>
+
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.learneasy.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+
+</navigation>

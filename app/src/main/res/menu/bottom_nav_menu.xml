@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Home"
+        android:icon="@drawable/home" />
+    <item
+        android:id="@+id/learnFragment"
+        android:title="Learn"
+        android:icon="@drawable/lightbulb" />
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Profile"
+        android:icon="@drawable/person" />
+</menu>
