@@ -136,7 +136,17 @@ public class ProfileFragment extends Fragment {
             img.setOnClickListener(v -> {
                 selectedImageIndex = index;
                 profileImage.setImageResource(profilePics[selectedImageIndex]);
-                dbRef.child("imageIndex").setValue(selectedImageIndex); // ✅ Save to Firebase
+                profileImage.setImageResource(profilePics[selectedImageIndex]);
+
+// 🔄 Save to Firebase
+                dbRef.child("imageIndex").setValue(selectedImageIndex)
+                        .addOnSuccessListener(unused -> {
+                            // ✅ Refresh MainActivity profile icon
+                            if (getActivity() instanceof MainActivity) {
+                                ((MainActivity) getActivity()).loadProfileImage();
+                            }
+                        });
+
                 Log.d("ProfileImage", "Saved image index: " + selectedImageIndex);
                 dialog.dismiss();
             });

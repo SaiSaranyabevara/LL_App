@@ -168,5 +168,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void loadProfileImage() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        String uid = user.getUid();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(uid);
+
+        userRef.child("imageIndex").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Long imgIndex = snapshot.getValue(Long.class);
+                if (imgIndex != null) {
+                    int index = imgIndex.intValue();
+                    int[] profilePics = {
+                            R.drawable.cat1, R.drawable.cat2, R.drawable.cat3, R.drawable.cat4,
+                            R.drawable.cat5, R.drawable.cat6, R.drawable.cat7, R.drawable.cat8
+                    };
+
+                    if (index >= 0 && index < profilePics.length && profileIcon != null) {
+                        Glide.with(MainActivity.this)
+                                .load(profilePics[index])
+                                .circleCrop()
+                                .into(profileIcon);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Error loading profile image", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

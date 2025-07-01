@@ -16,6 +16,9 @@ import android.widget.*;
 // import com.google.android.gms.common.api.ApiException;
 // import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -74,12 +77,21 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnSuccessListener(authResult -> {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
+                            String uid = user.getUid();
+
+                            // Update Firebase Auth display name
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name)
                                     .build();
                             user.updateProfile(profileUpdates);
                             user.sendEmailVerification();
+
+                            // ✅ Save name and default image index to Firebase Realtime Database
+                            DatabaseReference ref = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("users").child(uid);
+                            ref.child("name").setValue(name);
+                            ref.child("imageIndex").setValue(0);  // Set default cat1 image
                         }
+
 
                         Toast.makeText(this, "Registered successfully", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, LoginActivity.class));
