@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLight"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Lesson Title -->
+        <TextView
+            android:id="@+id/lessonTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lesson Title"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Lesson Paragraph -->
+        <TextView
+            android:id="@+id/lessonParagraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lesson paragraph content goes here."
+            android:textSize="16sp"
+            android:textColor="@color/textSecondary"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Quiz Score + Retry Button Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/quizScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Score: 0"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/textPrimary" />
+
+            <Button
+                android:id="@+id/retryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Re-attempt"
+                android:visibility="gone"
+                android:textSize="14sp"
+                android:layout_gravity="end"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:backgroundTint="@color/lavenderMedium"
+                android:textColor="@color/textOnPrimary" />
+        </LinearLayout>
+
+        <!-- Quiz Container -->
+        <LinearLayout
+            android:id="@+id/quizContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Submit Quiz Button -->
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Quiz"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/textOnPrimary"
+            android:layout_marginBottom="12dp" />
+
+    </LinearLayout>
+</ScrollView>
