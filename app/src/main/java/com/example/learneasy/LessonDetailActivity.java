@@ -2,6 +2,7 @@ package com.example.learneasy;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -46,6 +47,8 @@ public class LessonDetailActivity extends AppCompatActivity {
         skill = getIntent().getStringExtra("skill");
         lessonId = getIntent().getStringExtra("lessonId");
 
+        Log.d("LessonID_Debug", "Loaded lessonId: " + lessonId);
+
         if (level != null && skill != null && lessonId != null) {
             checkIfAttemptedThenLoadLesson();
         } else {
@@ -78,25 +81,41 @@ public class LessonDetailActivity extends AppCompatActivity {
     }
 
     private void checkIfAttemptedThenLoadLesson() {
+        userAnswers.clear();
+        correctAnswers.clear();
+        questionGroups.clear();
+
         DatabaseReference userAnsRef = FirebaseDatabase.getInstance()
                 .getReference("users")
                 .child(uid)
                 .child("quizAnswers")
-                .child(lessonId);
+                .child(level.toLowerCase())
+                .child(skill.toLowerCase())
+                .child(lessonId); // <-- 🔄 changed
 
         userAnsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                alreadyAttempted = snapshot.exists();
+                boolean hasScore = snapshot.child("score").exists();
+                boolean hasAnswers = snapshot.child("answers").exists();
+
+                alreadyAttempted = hasScore && hasAnswers;
+
                 if (alreadyAttempted) {
                     for (DataSnapshot ansSnap : snapshot.child("answers").getChildren()) {
                         userAnswers.put(ansSnap.getKey(), ansSnap.getValue(String.class));
                     }
+
                     String score = snapshot.child("score").getValue(String.class);
                     quizScore.setText("Score: " + score);
                     submitButton.setVisibility(View.GONE);
                     retryButton.setVisibility(View.VISIBLE);
+                } else {
+                    quizScore.setText("Score: 0");
+                    submitButton.setVisibility(View.VISIBLE);
+                    retryButton.setVisibility(View.GONE);
                 }
+
                 loadLesson(alreadyAttempted);
             }
 
@@ -223,7 +242,9 @@ public class LessonDetailActivity extends AppCompatActivity {
                 .getReference("users")
                 .child(uid)
                 .child("quizAnswers")
-                .child(lessonId)
+                .child(level.toLowerCase())
+                .child(skill.toLowerCase())
+                .child(lessonId) // <-- 🔄 changed
                 .setValue(result)
                 .addOnSuccessListener(unused -> Toast.makeText(this, "Answers saved", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to save answers", Toast.LENGTH_SHORT).show());
