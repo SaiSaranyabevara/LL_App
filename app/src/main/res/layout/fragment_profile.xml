@@ -1,89 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_main_container"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
     android:background="#ffffff">
 
-    <!-- Profile Image with Edit Icon Overlay -->
-    <FrameLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/fragment_main_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
 
-        <!-- Circular Profile Picture -->
-        <ImageView
-            android:id="@+id/profile_image"
+        <!-- Profile Image with Edit Icon Overlay -->
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/cat1"
-            android:scaleType="centerCrop"
-            android:padding="2dp" />
+            android:layout_marginBottom="16dp">
 
-        <!-- Edit Icon (Bottom-right of profile image) -->
-        <ImageView
-            android:id="@+id/edit_icon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_edit"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="4dp"
-            android:padding="4dp"
-            android:contentDescription="Edit"
-            android:clickable="true"
-            android:focusable="true" />
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/cat1"
+                android:scaleType="centerCrop"
+                android:background="@drawable/circle_bg"
+                android:padding="2dp" />
 
-    <!-- Name -->
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Saranya Bevara"
-        android:textSize="22sp"
-        android:textColor="#033253"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+            <ImageView
+                android:id="@+id/edit_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_edit"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:contentDescription="Edit Profile Picture" />
+        </FrameLayout>
 
-    <!-- Hidden Edit Name Field -->
-    <EditText
-        android:id="@+id/edit_name"
-        android:hint="Enter your name"
-        android:text="Saranya Bevara"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        <!-- Displayed Name -->
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Name"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#033253"
+            android:layout_marginBottom="8dp" />
 
-    <!-- Edit Profile Button -->
-    <Button
-        android:id="@+id/edit_button"
-        android:text="Edit Profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        <!-- Editable Name Field -->
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name"
+            android:text="Your Name"
+            android:visibility="gone"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:background="@android:drawable/edit_text"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp" />
 
-    <!-- Save Button (Hidden Initially) -->
-    <Button
-        android:id="@+id/save_button"
-        android:text="Save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:visibility="gone" />
+        <!-- Edit Button -->
+        <Button
+            android:id="@+id/edit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:layout_marginTop="8dp" />
 
-    <!-- Status Button -->
-    <Button
-        android:id="@+id/status_button"
-        android:text="Status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
 
-</LinearLayout>
+        <!-- Status Button -->
+        <Button
+            android:id="@+id/status_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

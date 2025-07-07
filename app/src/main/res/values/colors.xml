@@ -17,7 +17,7 @@
     <color name="textOnPrimary">#FFFFFF</color>        <!-- White text on purple -->
 
     <!-- Status / Alerts -->
-    <color name="successGreen">#32D74B</color>         <!-- Success status -->
+    <color name="successGreen">#238E34</color>         <!-- Success status -->
     <color name="errorRed">#FF3B30</color>             <!-- Error message color -->
     <color name="infoBlue">#5AC8FA</color>             <!-- Info/tooltip -->
 

@@ -46,49 +46,50 @@ public class ProfileFragment extends Fragment {
         statusButton = view.findViewById(R.id.status_button);
         profileImage = view.findViewById(R.id.profile_image);
         editIcon = view.findViewById(R.id.edit_icon);
-        mainProfile = view.findViewById(R.id.fragment_main_container); // Should match your XML ID
+        mainProfile = view.findViewById(R.id.fragment_main_container);
 
-        // Get logged-in Firebase user
+        // Firebase user check
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             userId = user.getUid();
             dbRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-            loadUserProfile(); // 🔁 Load profile on start
+            userName.setText("Loading...");
+            loadUserProfile();
         } else {
             Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
         }
 
-        // Edit name
+        // Edit button click
         editButton.setOnClickListener(v -> {
             userName.setVisibility(View.GONE);
             editName.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.VISIBLE);
         });
 
-        // Save name to Firebase
+        // Save name
         saveButton.setOnClickListener(v -> {
             String newName = editName.getText().toString().trim();
             if (!newName.isEmpty()) {
                 userName.setText(newName);
-                dbRef.child("name").setValue(newName); // ✅ Save name
+                dbRef.child("name").setValue(newName);
             }
             userName.setVisibility(View.VISIBLE);
             editName.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
         });
 
-        // Status button (optional)
+        // Status Button
         statusButton.setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Status button clicked", Toast.LENGTH_SHORT).show());
 
-        // Image click listeners
+        // Profile Image Click
         profileImage.setOnClickListener(v -> showImagePickerDialog());
         editIcon.setOnClickListener(v -> showPopupMenu(v));
 
         return view;
     }
 
-    // 🔄 Load profile from Firebase
+    // Load profile from Firebase
     private void loadUserProfile() {
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -106,7 +107,7 @@ public class ProfileFragment extends Fragment {
                     profileImage.setImageResource(profilePics[selectedImageIndex]);
                     Log.d("FirebaseLoad", "Loaded imageIndex: " + imageIndex);
                 } else {
-                    profileImage.setImageResource(profilePics[0]); // fallback
+                    profileImage.setImageResource(profilePics[0]); // default
                 }
             }
 
@@ -117,7 +118,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // 🖼️ Show profile image picker dialog
+    // Profile Image Picker Dialog
     private void showImagePickerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View dialogView = getLayoutInflater().inflate(R.layout.profile_image_picker_dialog, null);
@@ -136,12 +137,11 @@ public class ProfileFragment extends Fragment {
             img.setOnClickListener(v -> {
                 selectedImageIndex = index;
                 profileImage.setImageResource(profilePics[selectedImageIndex]);
-                profileImage.setImageResource(profilePics[selectedImageIndex]);
 
-// 🔄 Save to Firebase
+                // Save to Firebase
                 dbRef.child("imageIndex").setValue(selectedImageIndex)
                         .addOnSuccessListener(unused -> {
-                            // ✅ Refresh MainActivity profile icon
+                            // Optional: refresh profile icon in MainActivity if needed
                             if (getActivity() instanceof MainActivity) {
                                 ((MainActivity) getActivity()).loadProfileImage();
                             }
@@ -151,9 +151,10 @@ public class ProfileFragment extends Fragment {
                 dialog.dismiss();
             });
         }
-    }
 
-    // ☰ Edit menu popup
+}
+
+    // Edit Menu Popup
     private void showPopupMenu(View view) {
         PopupMenu popup = new PopupMenu(requireContext(), view);
         popup.getMenuInflater().inflate(R.menu.profile_popup_menu, popup.getMenu());
