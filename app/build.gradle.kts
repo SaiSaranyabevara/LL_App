@@ -45,6 +45,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.android.volley:volley:1.2.1")
+
+
 
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth:23.2.1")

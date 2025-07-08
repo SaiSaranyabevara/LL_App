@@ -67,7 +67,7 @@ public class LearnFragment extends Fragment {
         DatabaseReference quizRef = FirebaseDatabase.getInstance().getReference("users").child(uid).child("quizAnswers");
 
         String[] skills = {"Reading", "Writing", "Listening", "Speaking"};
-        String[] levels = {"Basic", "Intermediate", "Difficult"};
+        String[] levels = {"Basic", "Intermediate", "Advanced"};
         int totalLessonsPerSkill = levels.length * 6;
 
         for (String skill : skills) {

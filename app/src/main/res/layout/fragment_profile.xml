@@ -81,12 +81,31 @@
             android:layout_marginTop="8dp"
             android:visibility="gone" />
 
-        <!-- Status Button -->
-        <Button
-            android:id="@+id/status_button"
+
+        <!-- Word of the Day Section -->
+        <LinearLayout
+            android:id="@+id/today_word_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Status"
-            android:layout_marginTop="16dp" />
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_card_background"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/today_word_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today's Word"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#2E3A59"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp" />
+        </LinearLayout>
+
     </LinearLayout>
+
 </ScrollView>

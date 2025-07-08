@@ -1,26 +1,48 @@
 package com.example.learneasy;
 
 import android.app.AlertDialog;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.PopupMenu;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class ProfileFragment extends Fragment {
 
-    TextView userName;
+    TextView userName,todayWordText;
     EditText editName;
     Button editButton, saveButton, statusButton;
     ImageView profileImage, editIcon;
-    LinearLayout mainProfile;
+    LinearLayout mainProfile,todayWordContainer;
 
     int selectedImageIndex = 0;
     int[] profilePics = {
@@ -43,10 +65,12 @@ public class ProfileFragment extends Fragment {
         editName = view.findViewById(R.id.edit_name);
         editButton = view.findViewById(R.id.edit_button);
         saveButton = view.findViewById(R.id.save_button);
-        statusButton = view.findViewById(R.id.status_button);
+
         profileImage = view.findViewById(R.id.profile_image);
         editIcon = view.findViewById(R.id.edit_icon);
         mainProfile = view.findViewById(R.id.fragment_main_container);
+        todayWordText = view.findViewById(R.id.today_word_text);
+        todayWordContainer = view.findViewById(R.id.today_word_container);
 
         // Firebase user check
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -78,14 +102,19 @@ public class ProfileFragment extends Fragment {
             saveButton.setVisibility(View.GONE);
         });
 
-        // Status Button
-        statusButton.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Status button clicked", Toast.LENGTH_SHORT).show());
+//        // Status Button
+//        statusButton.setOnClickListener(v -> {
+//            getParentFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_container, new ProgressFragment())  // Replace with your container ID
+//                    .addToBackStack(null)
+//                    .commit();
+//        });
 
         // Profile Image Click
         profileImage.setOnClickListener(v -> showImagePickerDialog());
         editIcon.setOnClickListener(v -> showPopupMenu(v));
-
+        fetchWordFromDictionaryApi();
         return view;
     }
 
@@ -171,5 +200,110 @@ public class ProfileFragment extends Fragment {
         });
 
         popup.show();
+    }
+
+
+//the below code is for word of the day
+
+
+    private void fetchWordFromDictionaryApi() {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        String[] sampleWords = {"serendipity", "eloquent", "gregarious", "quintessential", "ephemeral"};
+        int index = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR) % sampleWords.length;
+        String word = sampleWords[index];
+
+        String url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONObject wordData = response.getJSONObject(0);
+                        JSONArray meanings = wordData.getJSONArray("meanings");
+                        JSONObject firstMeaning = meanings.getJSONObject(0);
+                        String partOfSpeech = firstMeaning.optString("partOfSpeech", "");
+                        JSONArray definitions = firstMeaning.getJSONArray("definitions");
+                        String definition = definitions.getJSONObject(0).optString("definition", "No definition");
+                        String example = definitions.getJSONObject(0).optString("example", "");
+
+                        JSONArray phonetics = wordData.optJSONArray("phonetics");
+                        String audioUrl = "";
+                        String phoneticText = "";
+                        if (phonetics != null && phonetics.length() > 0) {
+                            for (int i = 0; i < phonetics.length(); i++) {
+                                JSONObject phonetic = phonetics.getJSONObject(i);
+                                if (phonetic.has("audio") && !phonetic.getString("audio").isEmpty()) {
+                                    audioUrl = phonetic.getString("audio");
+                                    phoneticText = phonetic.optString("text", "");
+                                    break;
+                                }
+                            }
+                        }
+
+                        todayWordText.setText(word);
+
+                        String finalExample = example;
+                        String finalAudioUrl = audioUrl;
+                        String finalPhoneticText = phoneticText;
+                        todayWordContainer.setOnClickListener(v -> {
+                            showFlashcardDialog(word, definition, finalExample, partOfSpeech, finalAudioUrl, finalPhoneticText);
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.e("WordFetch", "API error: " + error.getMessage())
+
+        );
+
+        queue.add(request);
+    }
+
+    private void showFlashcardDialog(String word, String definition, String example, String partOfSpeech, String audioUrl, String phoneticText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.flashcard_dialog, null);
+        builder.setView(dialogView);
+
+        TextView wordView = dialogView.findViewById(R.id.word_title);
+        TextView defView = dialogView.findViewById(R.id.word_definition);
+        TextView exampleView = dialogView.findViewById(R.id.word_example);
+        TextView usageView = dialogView.findViewById(R.id.word_usage);
+        TextView phoneticView = dialogView.findViewById(R.id.word_phonetic);
+        ImageView closeIcon = dialogView.findViewById(R.id.close_button);
+        ImageView audioIcon = dialogView.findViewById(R.id.audio_button);
+
+        wordView.setText(word);
+        defView.setText("Meaning: " + definition);
+        usageView.setText("Part of Speech: " + partOfSpeech);
+        phoneticView.setText("Phonetic: " + phoneticText);
+
+        if (example != null && !example.isEmpty()) {
+            exampleView.setVisibility(View.VISIBLE);
+            exampleView.setText("Example: " + example);
+        } else {
+            exampleView.setVisibility(View.GONE);
+        }
+
+        audioIcon.setOnClickListener(v -> {
+            if (!audioUrl.isEmpty()) {
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource(audioUrl);
+                    mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+                    mediaPlayer.setOnCompletionListener(MediaPlayer::release);
+                    mediaPlayer.prepareAsync();
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Couldn't play audio", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getContext(), "No audio available", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        closeIcon.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 }
