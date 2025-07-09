@@ -39,48 +39,77 @@
                 android:contentDescription="Edit Profile Picture" />
         </FrameLayout>
 
-        <!-- Displayed Name -->
-        <TextView
-            android:id="@+id/user_name"
+        <!-- Name Row (View Mode) -->
+        <LinearLayout
+            android:id="@+id/name_display_row"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Name"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#033253"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
-        <!-- Editable Name Field -->
-        <EditText
-            android:id="@+id/edit_name"
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Name"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#033253"
+                android:layout_marginEnd="8dp" />
+
+            <ImageView
+                android:id="@+id/edit_name_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_edit"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:contentDescription="Edit Name" />
+        </LinearLayout>
+
+        <!-- Name Row (Edit Mode) -->
+        <LinearLayout
+            android:id="@+id/name_edit_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your name"
-            android:text="Your Name"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:visibility="gone"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:background="@android:drawable/edit_text"
-            android:padding="10dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="16dp">
 
-        <!-- Edit Button -->
-        <Button
-            android:id="@+id/edit_button"
-            android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/edit_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Enter your name"
+                android:text="Your Name"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:background="@android:drawable/edit_text"
+                android:padding="10dp" />
+
+            <ImageView
+                android:id="@+id/edit_done_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_tick"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="Save Name" />
+        </LinearLayout>
+
+        <!-- Email Display -->
+        <TextView
+            android:id="@+id/email_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
-            android:layout_marginTop="8dp" />
-
-        <!-- Save Button -->
-        <Button
-            android:id="@+id/save_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-
+            android:text="email@example.com"
+            android:textColor="#555555"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
 
         <!-- Word of the Day Section -->
         <LinearLayout

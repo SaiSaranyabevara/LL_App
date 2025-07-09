@@ -6,15 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.*;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.PopupMenu;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,24 +18,21 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.*;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class ProfileFragment extends Fragment {
 
-    TextView userName,todayWordText;
+    TextView userName, emailText, todayWordText;
     EditText editName;
-    Button editButton, saveButton, statusButton;
-    ImageView profileImage, editIcon;
-    LinearLayout mainProfile,todayWordContainer;
+    ImageView profileImage, editIcon, editNameIcon, doneIcon;
+    LinearLayout nameDisplayRow, nameEditRow, mainProfile, todayWordContainer;
 
     int selectedImageIndex = 0;
     int[] profilePics = {
@@ -58,18 +48,22 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Bind views
         userName = view.findViewById(R.id.user_name);
+        emailText = view.findViewById(R.id.email_text);
         editName = view.findViewById(R.id.edit_name);
-        editButton = view.findViewById(R.id.edit_button);
-        saveButton = view.findViewById(R.id.save_button);
-
         profileImage = view.findViewById(R.id.profile_image);
         editIcon = view.findViewById(R.id.edit_icon);
-        mainProfile = view.findViewById(R.id.fragment_main_container);
         todayWordText = view.findViewById(R.id.today_word_text);
+
+        editNameIcon = view.findViewById(R.id.edit_name_icon);
+        doneIcon = view.findViewById(R.id.edit_done_icon);
+        nameDisplayRow = view.findViewById(R.id.name_display_row);
+        nameEditRow = view.findViewById(R.id.name_edit_row);
+        mainProfile = view.findViewById(R.id.fragment_main_container);
         todayWordContainer = view.findViewById(R.id.today_word_container);
 
         // Firebase user check
@@ -77,66 +71,68 @@ public class ProfileFragment extends Fragment {
         if (user != null) {
             userId = user.getUid();
             dbRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-            userName.setText("Loading...");
+
+            // Set name and email from Firebase Auth
+            userName.setText(user.getDisplayName() != null ? user.getDisplayName() : "Your Name");
+            editName.setText(user.getDisplayName() != null ? user.getDisplayName() : "");
+            emailText.setText(user.getEmail() != null ? user.getEmail() : "email@example.com");
+
             loadUserProfile();
         } else {
             Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
         }
 
-        // Edit button click
-        editButton.setOnClickListener(v -> {
-            userName.setVisibility(View.GONE);
-            editName.setVisibility(View.VISIBLE);
-            saveButton.setVisibility(View.VISIBLE);
+        // Name edit click
+        editNameIcon.setOnClickListener(v -> {
+            nameDisplayRow.setVisibility(View.GONE);
+            nameEditRow.setVisibility(View.VISIBLE);
         });
 
-        // Save name
-        saveButton.setOnClickListener(v -> {
+        // Save (done) click
+        doneIcon.setOnClickListener(v -> {
             String newName = editName.getText().toString().trim();
             if (!newName.isEmpty()) {
                 userName.setText(newName);
+
+                // Update Firebase Authentication displayName
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(newName)
+                            .build();
+                    currentUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d("FirebaseAuth", "User display name updated.");
+                                }
+                            });
+                }
+
+                // Update name in Realtime Database
                 dbRef.child("name").setValue(newName);
             }
-            userName.setVisibility(View.VISIBLE);
-            editName.setVisibility(View.GONE);
-            saveButton.setVisibility(View.GONE);
+            nameEditRow.setVisibility(View.GONE);
+            nameDisplayRow.setVisibility(View.VISIBLE);
         });
 
-//        // Status Button
-//        statusButton.setOnClickListener(v -> {
-//            getParentFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, new ProgressFragment())  // Replace with your container ID
-//                    .addToBackStack(null)
-//                    .commit();
-//        });
-
-        // Profile Image Click
+        // Profile image handling
         profileImage.setOnClickListener(v -> showImagePickerDialog());
         editIcon.setOnClickListener(v -> showPopupMenu(v));
+
         fetchWordFromDictionaryApi();
         return view;
     }
 
-    // Load profile from Firebase
     private void loadUserProfile() {
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String name = snapshot.child("name").getValue(String.class);
                 Integer imageIndex = snapshot.child("imageIndex").getValue(Integer.class);
-
-                if (name != null) {
-                    userName.setText(name);
-                    editName.setText(name);
-                }
-
                 if (imageIndex != null && imageIndex >= 0 && imageIndex < profilePics.length) {
                     selectedImageIndex = imageIndex;
                     profileImage.setImageResource(profilePics[selectedImageIndex]);
-                    Log.d("FirebaseLoad", "Loaded imageIndex: " + imageIndex);
                 } else {
-                    profileImage.setImageResource(profilePics[0]); // default
+                    profileImage.setImageResource(profilePics[0]);
                 }
             }
 
@@ -147,7 +143,6 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // Profile Image Picker Dialog
     private void showImagePickerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View dialogView = getLayoutInflater().inflate(R.layout.profile_image_picker_dialog, null);
@@ -167,23 +162,18 @@ public class ProfileFragment extends Fragment {
                 selectedImageIndex = index;
                 profileImage.setImageResource(profilePics[selectedImageIndex]);
 
-                // Save to Firebase
                 dbRef.child("imageIndex").setValue(selectedImageIndex)
                         .addOnSuccessListener(unused -> {
-                            // Optional: refresh profile icon in MainActivity if needed
                             if (getActivity() instanceof MainActivity) {
                                 ((MainActivity) getActivity()).loadProfileImage();
                             }
                         });
 
-                Log.d("ProfileImage", "Saved image index: " + selectedImageIndex);
                 dialog.dismiss();
             });
         }
+    }
 
-}
-
-    // Edit Menu Popup
     private void showPopupMenu(View view) {
         PopupMenu popup = new PopupMenu(requireContext(), view);
         popup.getMenuInflater().inflate(R.menu.profile_popup_menu, popup.getMenu());
@@ -202,17 +192,12 @@ public class ProfileFragment extends Fragment {
         popup.show();
     }
 
-
-//the below code is for word of the day
-
-
     private void fetchWordFromDictionaryApi() {
         RequestQueue queue = Volley.newRequestQueue(requireContext());
 
         String[] sampleWords = {"serendipity", "eloquent", "gregarious", "quintessential", "ephemeral"};
         int index = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR) % sampleWords.length;
         String word = sampleWords[index];
-
         String url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -241,10 +226,10 @@ public class ProfileFragment extends Fragment {
                         }
 
                         todayWordText.setText(word);
-
                         String finalExample = example;
                         String finalAudioUrl = audioUrl;
                         String finalPhoneticText = phoneticText;
+
                         todayWordContainer.setOnClickListener(v -> {
                             showFlashcardDialog(word, definition, finalExample, partOfSpeech, finalAudioUrl, finalPhoneticText);
                         });
@@ -253,9 +238,7 @@ public class ProfileFragment extends Fragment {
                         e.printStackTrace();
                     }
                 },
-                error -> Log.e("WordFetch", "API error: " + error.getMessage())
-
-        );
+                error -> Log.e("WordFetch", "API error: " + error.getMessage()));
 
         queue.add(request);
     }
